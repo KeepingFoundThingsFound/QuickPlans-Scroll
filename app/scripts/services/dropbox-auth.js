@@ -6,8 +6,12 @@ define(['./module','angular'], function (services,angular) {
     var dropboxClientCredentials = {
 
       // App credentials for app-specific Dropbox folder (Quickplans KFTF)
-      key: 'zvroy7qogrcueuz',
-      secret: '1ou4vueptnvkhpx'
+      //key: 'uz03nsz5udagdff',
+      //secret: 'cjh49vw2w572xfp'
+      
+      //App credentials for full dropbox access (KFTF)
+      key: 'e87djjebo1o8vwe',
+      secret: 'ylfsrck3qicvx81'
 
       // App credentials for full dropbox access (Project Plans)
       // key: 'jrt7eykb5odmd98',
