@@ -19,7 +19,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       };
 
       // Staring folder in Dropbox
-       this.groupingItemURI = '/QuickPlans Demo/Vacation';
+       this.groupingItemURI = '/notes';
       // this.groupingItemURI = '/';
 
       // Set up all of the item mirror options, even though
