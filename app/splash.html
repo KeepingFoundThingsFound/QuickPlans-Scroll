@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+  <title>Application Page</title>
+  <link rel="stylesheet" type="text/css" href="bower_components/sass-bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.min.css">
+    
+  <script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js"></script>
+  <!-- load ItemMirror.min.js and your scripts last -->
+  <script src="bower_components/itemMirrorWebClient/build/ItemMirror.dev.js"></script>
+  <script src="scripts/Splash-Screen/folderSelectSplash.js"></script>
+  <script src="bower_components/jquery/jquery.js"></script>  
+  <script src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
+  
+</head>
+
+
+<body>
+  <!-- itemMirror Selection modal -->
+  <div class="modal fade" id="modalDialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Please select the folder you wish to launch quickplans from. (Do not start at the Root if you have many files and folders)</h4>
+      </div>
+      <div class="modal-body">
+        <ul></ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-primary">Open this Folder</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+</body>
+</html>

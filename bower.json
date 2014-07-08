@@ -4,7 +4,7 @@
   "dependencies": {
     "requirejs": "~2.1.11",
     "dropbox.min": "http://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js",
-    "itemMirrorWebClient": "https://github.com/KeepingFoundThingsFound/itemMirrorWebClient.git",
+    "itemMirror": "https://github.com/KeepingFoundThingsFound/itemMirror.git",
     "angular": "latest",
     "json3": "latest",
     "es5-shim": "latest",
