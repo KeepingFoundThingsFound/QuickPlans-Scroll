@@ -8,7 +8,7 @@ require.config({
     angular: '../bower_components/angular/angular',
     'angular-route': '../bower_components/angular-route/angular-route',
     'angular-ui-tree': '../bower_components/angular-ui-tree/dist/angular-ui-tree',
-    ItemMirror: '../bower_components/itemMirrorWebClient/build/ItemMirror.dev',
+    ItemMirror: '../bower_components/itemMirror/build/ItemMirror.dev',
     jquery: '../bower_components/jquery/jquery',
     hallo: '../bower_components/hallo.js/hallo',
     dropbox: '../bower_components/dropbox.min/index',

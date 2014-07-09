@@ -94,7 +94,7 @@ itemMirrorOptions = {
       function listAssociations(itemMirror){
             var displayText;
             //Limit output to x associations
-            var cap = 75;
+            var cap = 200;
             var length;
             console.log(itemMirror);
             $('#modalDialog div.modal-body ul').empty();
