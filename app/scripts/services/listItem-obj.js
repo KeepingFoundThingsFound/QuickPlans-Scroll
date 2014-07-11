@@ -73,14 +73,20 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           var self = this;
 
           return this.parentIM.moveAssociation(this.guid, destinationIM.itemMirror)
-          .then(function(result) { return self.selfIM.refresh(); })
+          .then(function(result) { console.log("Self");
+	    console.log(self.selfIM.itemMirror);console.log("Dest");
+	    console.log(destinationIM.itemMirror); return destinationIM.refresh(); })
           .then(function(result) { return destinationIM.getAssociationGUIDs(); })
           .then(function(GUIDs) { return GUIDs.diff(currentGUIDs); })
           .then(function(GUIDs) { 
             if(GUIDs.length === 1) {
               self.guid = GUIDs[0];
             }
+	    destinationIM.refresh();
             self.parentIM = destinationIM;
+	    self.parentIM.refresh();
+	    console.log("Parent/Dest");
+	    console.log(self.parentIM.itemMirror);
             return self; 
           })
           .then(function(result) {
