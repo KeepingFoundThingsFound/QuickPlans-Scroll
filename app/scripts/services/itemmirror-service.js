@@ -350,11 +350,11 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           if (error) { console.log(error); deferred.reject(error); }
           deferred.resolve('Item moved to new folder');
           self.itemMirror.refresh();
-          destinationItemMirror.sync(function(error) {
-            if (error) { deferred.reject(error); }
-            console.log('ItemMirror object synced');
-            deferred.resolve(self);
-          });
+          //destinationItemMirror.sync(function(error) {
+          //  if (error) { deferred.reject(error); }
+          //  console.log('ItemMirror object synced');
+          //  deferred.resolve(self);
+          //});
         });
         return deferred.promise;   
       },

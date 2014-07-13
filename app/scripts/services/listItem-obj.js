@@ -82,11 +82,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             if(GUIDs.length === 1) {
               self.guid = GUIDs[0];
             }
-	    destinationIM.refresh();
             self.parentIM = destinationIM;
-	    self.parentIM.refresh();
-	    console.log("Parent/Dest");
-	    console.log(self.parentIM.itemMirror);
             return self; 
           })
           .then(function(result) {
@@ -96,7 +92,6 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             return error; 
           });
         },
-
   			deleteItem : function() {
           var self = this;
           return this.parentIM.deleteAssociation(this.guid)
