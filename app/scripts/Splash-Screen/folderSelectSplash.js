@@ -1,17 +1,15 @@
+/**
+ *
+ *
+ */
 
-
-  /**
-   * If you ever get an error "require is undefined", it's because you have not included the
-   * require.js dependency on your page. See the <script> tag in this document ending with
-   * "require.js"
-   */
   require(["ItemMirror"], function(ItemMirror){
     "use strict";
-    
-        // Insert your Dropbox app key here:
 
-      var DESTURL = 'index.html';
-
+      var DESTURL = 'index.html'; // the page you want to redirect to and append the path after
+      var MAXFOLDERS = 200; // how many folders to list out
+      var DELIMITER = "#/";
+      
     var
       dropboxClientCredentials,
       //dropboxAuthDriver,
@@ -79,49 +77,39 @@ itemMirrorOptions = {
       
       //Construct an itemMirror object and do something with it
       function constructNewItemMirror() {
-        // Construct new ItemMirror in Case 3, could choose other cases
         console.log("Now Creating new itemMirror");
         new ItemMirror(itemMirrorOptions[3], function (error, itemMirror) {
           if (error) { throw error; }
           console.log("Created new itemMirror");
-          //SchemaVersion 0.54
-          //alertSchemaVersion(itemMirror);
           listAssociations(itemMirror);
         });
       };
   
       //get an array of Association GUIDs and do something with it.
-      function listAssociations(itemMirror){
+      function listAssociations(itemMirror, groupingItemURI){
             var displayText;
-            //Limit output to x associations
-            var cap = 200;
+            var cap = MAXFOLDERS;
             var length;
             console.log(itemMirror);
+            $('a#upOneLvl').remove();
             $('#modalDialog div.modal-body ul').empty();
+            $('div#modalDialog div.modal-footer p').remove();
+            $('div#modalDialog div.modal-footer').prepend($('<p>',{text: groupingItemURI}).css('float', 'left'));
            itemMirror.listAssociations(function (error, GUIDs){
             itemMirror.getParent(function(error, parent){
               if (parent) {
                 upOneLevel(parent);
               }
             });
-            //make sure length does not exceed cap.
             if (GUIDs.length >= cap) {
               length = cap
             }else {
               length = GUIDs.length
             }
-            //var isGroupingItem;
-            //loop across GUID up to length
             for (var i=0;i<length;i++){
-            //for (var i=0;i<10;i++){
-              //code to get displayText and print it out
-              //console.log("Reading GUID:" + GUIDs[i]);
-              //get Displaytext for Association
               itemMirror.getAssociationDisplayText(GUIDs[i], function(error, text){
                 displayText = text;
-                //Check if this Association is a Grouping Item (a folder in the case of dropbox)
               });
-              //Print the Association
               prntAssoc(error, displayText, GUIDs[i], itemMirror);
             }
             if (error) {
@@ -133,24 +121,19 @@ itemMirrorOptions = {
       //Event handler for navigating into a subfolder/child grouping item
       //you've clicked on
       function createItemMirrorFromGroupingItem(event) {
-          //event.stopPropagation();
           var itemMirror = event.data.itemmirror;
-          //console.log(itemMirror);
           var GUID = event.data.guid;
-          //This will always run the constructor on Case 3, but has the added benefit of
-          //adding a Parent for successful back-navigation
           console.log("Now creating a grouping item for " + GUID);
           itemMirror.createItemMirrorForAssociatedGroupingItem(
             GUID, function (error, newItemMirror) {
             if (error) { throw error; }
-            //console.log(newItemMirror);
-            //newItemMirror._groupingItemURI = newItemMirror._groupingItemURI;
-            listAssociations(newItemMirror);
+            
             newItemMirror.getGroupingItemURI(function (error, groupingItemURI) {
+                listAssociations(newItemMirror, groupingItemURI);
                 $('div#modalDialog button').click(function (e) {
                         console.log(groupingItemURI);
-                        window.location.assign(DESTURL + "#/" + groupingItemURI);
-                        //window.location.reload();
+                        window.location.assign(DESTURL + DELIMITER + groupingItemURI);
+                        //window.location.reload(); RELOAD NOT REQUIRED WHEN REDIRECT FROM DIFFERENT PAGE
                   });
             });
           });
@@ -163,7 +146,6 @@ itemMirrorOptions = {
             throw error;
           }
           alert(schemaVersion);
-          // do something with schemaVersion
         });
       };
   
@@ -175,23 +157,15 @@ itemMirrorOptions = {
         if (error) {
             throw error;
         }
-        //code for print to screen
-        //var $thisAssoc = $('<div>'/*, {'class':"explorirror"}*/);
         
         itemMirror.isAssociatedItemGrouping(GUID, function(error, isGroupingItem){
           if (isGroupingItem) {
-              //console.log("GUID is " + GUID);
-              //console.log("break");
               var $thisAssoc;
               $thisAssoc = $('<li>', {'text': " " + displayText});
               $thisAssoc.prepend($('<span>', {class:'glyphicon glyphicon-folder-close'}));
-              //$thisAssoc.prepend($('<img>', {'src':"Folder.png", 'alt':displayText, 'title':displayText}));
               $thisAssoc.bind("click",{guid:GUID, itemmirror:itemMirror},createItemMirrorFromGroupingItem);
             $('#modalDialog div.modal-body ul').append($thisAssoc);
           }
-          //else{
-          //  $thisAssoc.prepend($('<img>', {'src':"Document.png", 'alt':displayText, 'title':displayText}));
-          //}
         });
         
       };
@@ -199,10 +173,9 @@ itemMirrorOptions = {
       //Print an up one level button or link
       function upOneLevel(parent) {
         $('a#upOneLvl').remove();
-       $('<a>', {'href':"#" + parent._groupingItemURI, 'text':"^ Up One Level ^", id: "upOneLvl"}).on("click", function(){
+       $('<a>', {'class': "btn btn-primary btn-sm active", 'href':"#" + parent._groupingItemURI, 'text':"^ Up One Level ^", id: "upOneLvl"}).on("click", function(){
           if (parent) {
-            listAssociations(parent)
-             //Event Handler for taking it back to parent
+            listAssociations(parent, parent._groupingItemURI)
            }
        }).insertBefore('#modalDialog div.modal-body ul');
       };
