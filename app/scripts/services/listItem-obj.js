@@ -35,6 +35,20 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             return error; 
           });
         },
+	
+	addPhantomNote : function() {
+          var imObj = this.selfIM;
+          // Return nothing if the listItem doesn't have a selfIM yet
+          if(!imObj) { return $q.when(null); }
+
+          return imObj.getPhantomDisplayText()
+          .then(function(result) { return imObj.getPhantomURL(); })
+          .then(function(result) { 
+            return imObj.notes; 
+          }, function(error) { 
+            return error; 
+          });
+        },
 
   			renameItem : function() {
           var self = this;

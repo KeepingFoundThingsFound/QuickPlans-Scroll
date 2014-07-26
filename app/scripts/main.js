@@ -1,5 +1,5 @@
 require.config({
-  baseUrl: '/itemmirror/apps/quickplans/scripts',
+  baseUrl: '/scripts',
   paths: {
     jQuery: '../bower_components/jquery/jquery.min',
     'jQuery-UI': '../bower_components/jquery-ui/ui/jquery-ui',

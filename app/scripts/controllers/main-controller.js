@@ -67,6 +67,20 @@ define(['./module','angular'],
         $scope.currentNotes = result;
       }, function(error) { console.log('Error:' + error); });
     };
+    
+    $scope.addNotes = function(scope) {
+
+      var listItem = scope.$modelValue;
+
+      $scope.currentTitle = listItem.title;
+
+      // displaytext and associateditem (url)
+      listItem.addPhantomNote()
+      .then(function(result) {
+        $scope.showNotes(scope);
+      }, function(error) { console.log('Error:' + error); });
+    };
+
 
     $scope.delete = function(scope) {
       var listItem = scope.$modelValue;

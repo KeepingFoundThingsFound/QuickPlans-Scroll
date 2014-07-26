@@ -153,6 +153,27 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         });
         return deferred.promise;
       },
+      
+      createPhantomAssociation : function(name) {
+        var self = this;
+        var deferred = $q.defer();
+
+        var options = {
+          displayText: name, // Display text for the association. Required in all cases.
+          //itemURI: "", // URI of the item. Required for case 2 & 3.
+          //localItemRequested: false, // True if the local item is requested, else false. Required for cases 2 & 3.
+          //groupingItemURI: "", // URI of the grouping item. Required for cases 4 & 5.
+          //xooMLDriverURI: "", // URI of the XooML driver for the association. Required for cases 4 & 5.
+          //itemName: name, // URI of the new local non-grouping/grouping item. Required for cases 6 & 7.
+          isGroupingItem: 'false' // String? True if the item is a grouping item, else false. Required for cases 6 & 7.]
+        };
+
+        this.itemMirror.createAssociation(options, function(error, GUID) {
+          if (error) { deferred.reject(error); }
+          deferred.resolve(GUID);  
+        });
+        return deferred.promise;
+      },
 
       deleteAssociation : function(GUID) {
         var deferred = $q.defer();

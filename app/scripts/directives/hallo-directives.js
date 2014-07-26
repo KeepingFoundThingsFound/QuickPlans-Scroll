@@ -55,5 +55,51 @@ define(['./module','angular'], function (directives,angular) {
       };
   });
   
+directives.directive('hallo-note', function() {
+      return {
+          restrict: 'E A',
+          require: '?ngModel',
+          scope: { listitem: '=' },
+          link: function(scope, element, attrs, ngModel) {
+              if (!ngModel) {
+                  return;
+              }
+
+              element.hallo({
+                 plugins: {}
+              });
+
+              ngModel.$render = function() {
+                  element.html(ngModel.$viewValue || '');
+              };
+
+              element.on('hallodeactivated', function() {
+                // If user leaves field blank then revert to temp title
+                if(element.html == '') {
+                  scope.listitem.title = scope.listitem.tempTitle;
+                  ngModel.$setViewValue(scope.listitem.title);
+                }
+                // Rename the list item only if the user has changed it
+                if(scope.listitem.title !== element.html()) {
+                  // Update the local model
+                  ngModel.$setViewValue(element.html());
+                  console.log(scope);
+                  scope.listitem.tempTitle = element.html();
+                  scope.listitem.title = element.html();
+                  scope.$apply();
+                  // Have itemMirror rename the folder
+                  scope.listitem.renameItem();
+                }
+              });
+
+              element.on('keydown', function($event){
+                if($event.which === 13) {
+                  $event.preventDefault();
+                }
+              });
+          }
+      };
+  });
+  
 });
 

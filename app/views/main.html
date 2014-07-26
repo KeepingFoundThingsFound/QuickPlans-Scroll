@@ -39,8 +39,9 @@
   <div class="col-md-6">
     <div class="right-title">
       <span class="glyphicon glyphicon-bookmark"></span> {{ currentTitle }}
-      <a href="#"><span class="pull-right glyphicon glyphicon-plus"></span></a>
+      <a ng-click="addNotes(this)><span class="pull-right glyphicon glyphicon-plus"></span></a>
     </div>
+    <p hallo-note>Use this Space to write your note</p>
     <div class="note" ng-repeat="note in currentNotes">
       <p>{{ note.text }}</p>
       <div class="endnote-text">
