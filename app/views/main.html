@@ -39,11 +39,13 @@
   <div class="col-md-6">
     <div class="right-title">
       <span class="glyphicon glyphicon-bookmark"></span> {{ currentTitle }}
-      <a ng-click="addNotes(this)><span class="pull-right glyphicon glyphicon-plus"></span></a>
+      <a ng-click="addNotes(this)">
+        <span class="pull-right glyphicon glyphicon-plus"></span>
+      </a>
     </div>
-    <p>Use this Space to write your note</p>
+    <span hallo-note>Use this Space to write your note</span>
     <div class="note" ng-repeat="note in currentNotes">
-      <p hallo-note ng-model="note">{{ note.text }}</p>
+      <p hallo-note>{{ note.text }}</p>
       <div class="endnote-text">
         <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>
         <a class="pull-right" href="#"><span class="glyphicon glyphicon-trash"></span></a>
