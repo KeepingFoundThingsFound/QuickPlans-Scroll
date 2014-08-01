@@ -38,11 +38,9 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 	
 	addPhantomNote : function() {
           var imObj = this.selfIM;
-          // Return nothing if the listItem doesn't have a selfIM yet
           if(!imObj) { return $q.when(null); }
 
-          return imObj.getPhantomDisplayText()
-          .then(function(result) { return imObj.getPhantomURL(); })
+          return imObj.createPhantomAssociation()
           .then(function(result) { 
             return imObj.notes; 
           }, function(error) { 

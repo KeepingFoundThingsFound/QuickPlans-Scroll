@@ -13,6 +13,7 @@ define(['./module','angular'], function (directives,angular) {
           require: '?ngModel',
           scope: { listitem: '=' },
           link: function(scope, element, attrs, ngModel) {
+            console.log("Clicked");
               if (!ngModel) {
                   return;
               }
@@ -61,7 +62,9 @@ directives.directive('hallo-note', function() {
           require: '?ngModel',
           scope: { listitem: '=' },
           link: function(scope, element, attrs, ngModel) {
+            console.log("Clicked");
               if (!ngModel) {
+                console.log("No ng-model");
                   return;
               }
 
@@ -76,19 +79,19 @@ directives.directive('hallo-note', function() {
               element.on('hallodeactivated', function() {
                 // If user leaves field blank then revert to temp title
                 if(element.html == '') {
-                  scope.listitem.title = scope.listitem.tempTitle;
-                  ngModel.$setViewValue(scope.listitem.title);
+                  //scope.listitem.title = scope.listitem.tempTitle;
+                  //ngModel.$setViewValue(scope.listitem.title);
                 }
                 // Rename the list item only if the user has changed it
                 if(scope.listitem.title !== element.html()) {
                   // Update the local model
                   ngModel.$setViewValue(element.html());
                   console.log(scope);
-                  scope.listitem.tempTitle = element.html();
-                  scope.listitem.title = element.html();
+                  //scope.listitem.tempTitle = element.html();
+                  //scope.listitem.title = element.html();
                   scope.$apply();
                   // Have itemMirror rename the folder
-                  scope.listitem.renameItem();
+                  // scope.listitem.renameItem();
                 }
               });
 
