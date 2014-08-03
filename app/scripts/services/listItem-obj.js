@@ -36,11 +36,11 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           });
         },
 	
-	addPhantomNote : function() {
+	addPhantomNote : function(text) {
           var imObj = this.selfIM;
           if(!imObj) { return $q.when(null); }
 
-          return imObj.createPhantomAssociation()
+          return imObj.createPhantomAssociation(text)
           .then(function(result) { 
             return imObj.notes; 
           }, function(error) { 

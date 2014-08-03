@@ -58,9 +58,9 @@ define(['./module','angular'], function (directives,angular) {
 directives.directive('halloNote', function() {
       return {
           restrict: 'E A',
-          //require: '?ngModel',
-          //scope: {},
-          link: function(scope, element, attrs) {
+          require: '?ngModel',
+          scope: { associations: '=' },
+          link: function(scope, element, attrs, ngModel) {
               if (!ngModel) {
                 console.log("No ng-model");
                   return;

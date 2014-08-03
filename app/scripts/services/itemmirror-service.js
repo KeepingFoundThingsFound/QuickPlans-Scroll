@@ -60,7 +60,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
       this.associationGUIDs = [];      // string array of all GUIDs
       this.phantomGUIDs = [];    // string array of phantom assoc GUIDs only
-      this.notes = {};          // kay-value object. Key = GUID. Value = diplayname
+      this.notes = {};          // kay-value object. Key = GUID. Value = displayname
 
       this.namespaceURI = 'quickplans'; // URI for this webapp
     }
@@ -158,6 +158,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
 
+        console.log("Creating Phantom Association");
+        
         var options = {
           displayText: name, // Display text for the association. Required in all cases.
           //itemURI: "", // URI of the item. Required for case 2 & 3.

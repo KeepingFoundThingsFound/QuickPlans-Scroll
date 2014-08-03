@@ -23,6 +23,8 @@ define(['./module','angular'],
       $scope.currentTitle = 'Notes and Files';
       $scope.currentNotes = [];
 
+      $scope.currentList = null;
+      
       // Test flag
       $scope.status = true;
     });
@@ -56,11 +58,10 @@ define(['./module','angular'],
     };
 
     $scope.showNotes = function(scope) {
-
       var listItem = scope.$modelValue;
 
       $scope.currentTitle = listItem.title;
-
+      $scope.currentList = listItem;
       // displaytext and associateditem (url)
       listItem.getPhantomNotes()
       .then(function(result) {
@@ -68,16 +69,16 @@ define(['./module','angular'],
       }, function(error) { console.log('Error:' + error); });
     };
     
-    $scope.addNotes = function(scope) {
-
-      var listItem = scope.$modelValue;
-
-      $scope.currentTitle = listItem.title;
+    $scope.addNote = function(scope) {
+      var listItem = scope;
 
       // displaytext and associateditem (url)
-      listItem.addPhantomNote()
+      listItem.addPhantomNote("This is a new note")
       .then(function(result) {
-        $scope.showNotes(scope);
+          listItem.getPhantomNotes()
+          .then(function(result) {
+            $scope.currentNotes = result;
+          }, function(error) { console.log('Error:' + error); });
       }, function(error) { console.log('Error:' + error); });
     };
 
