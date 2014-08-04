@@ -158,7 +158,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
 
-        console.log("Creating Phantom Association");
+        console.log("Creating Phantom Association: " + name);
         
         var options = {
           displayText: name, // Display text for the association. Required in all cases.
@@ -167,11 +167,17 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           //groupingItemURI: "", // URI of the grouping item. Required for cases 4 & 5.
           //xooMLDriverURI: "", // URI of the XooML driver for the association. Required for cases 4 & 5.
           //itemName: name, // URI of the new local non-grouping/grouping item. Required for cases 6 & 7.
-          isGroupingItem: 'false' // String? True if the item is a grouping item, else false. Required for cases 6 & 7.]
+          //isGroupingItem: 'false' // String? True if the item is a grouping item, else false. Required for cases 6 & 7.]
         };
 
         this.itemMirror.createAssociation(options, function(error, GUID) {
-          if (error) { deferred.reject(error); }
+          if(error) {   console.log("Error: " + error);
+                        deferred.reject(error); }
+          console.log("GUID: " + GUID);
+            if (!error) { 
+              if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
+              self.notes[GUID].text = name;
+            }
           deferred.resolve(GUID);  
         });
         return deferred.promise;

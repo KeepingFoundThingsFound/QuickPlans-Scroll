@@ -78,6 +78,7 @@ define(['./module','angular'],
           listItem.getPhantomNotes()
           .then(function(result) {
             $scope.currentNotes = result;
+            console.log($scope.currentNotes);
           }, function(error) { console.log('Error:' + error); });
       }, function(error) { console.log('Error:' + error); });
     };

@@ -107,7 +107,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
   			deleteItem : function() {
           var self = this;
           return this.parentIM.deleteAssociation(this.guid)
-          .then(function(result) { 
+          .then(function(result) { -+
+		
             self.parentIM.refresh();
             return result; 
           }, function(error) { 
