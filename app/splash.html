@@ -3,15 +3,14 @@
   <title>Application Page</title>
   <link rel="stylesheet" type="text/css" href="bower_components/sass-bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.min.css">
-  
+    
   <script src="bower_components/jquery/jquery.js"></script>  
   <script src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
-  
+    
   <script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js"></script>
   <!-- load ItemMirror.min.js and your scripts last -->
-  <script src="bower_components/itemMirror/build/ItemMirror.dev.js"></script>
-  
+  <script src="bower_components/itemMirror/build/ItemMirror.min.js"></script>
   <script src="scripts/Splash-Screen/folderSelectSplash.js"></script>
 
   
@@ -25,17 +24,27 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Please select the folder you wish to launch quickplans from. (Do not start at the Root if you have many files and folders)</h4>
+        <h4 class="modal-title">Modal itemMirror Folder Select Dialog</h4>
+          <div style="float:right">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-primary active">
+                <input type="radio" name="folderSelectOptions" value="List" checked> <span class="glyphicon glyphicon-th-list"></span>
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="folderSelectOptions" value="Explorer"> <span class="glyphicon glyphicon-folder-open"></span>
+              </label>
+            </div>
+          </div>
       </div>
       <div class="modal-body">
-        <ul></ul>
+        <div class="list-group"></div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="clear:left">
         <button type="button" data-dismiss="modal" class="btn btn-primary">Open this Folder</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+  <!-- END itemMirror Selection modal -->
 </body>
 </html>
