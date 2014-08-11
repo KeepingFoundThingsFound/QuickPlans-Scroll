@@ -233,6 +233,7 @@ function modalFolderSelectList(ItemMirror) {
               });
               $thisAssoc.prepend($('<span>', {class:'glyphicon glyphicon-chevron-right'}).click(function(){
                   if ($thisAssoc.children("div").length == 0) {
+                        var $subIM;
                         $subIM = $('<div>', {'class': "list-group"});
                         $thisAssoc.append($subIM);
                         self.createItemMirrorFromGroupingItem(GUID, itemMirror, $subIM);
