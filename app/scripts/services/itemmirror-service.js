@@ -60,7 +60,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
       this.associationGUIDs = [];      // string array of all GUIDs
       this.phantomGUIDs = [];    // string array of phantom assoc GUIDs only
-      this.notes = {};          // kay-value object. Key = GUID. Value = displayname
+      this.notes = {};          // key-value object. Key = GUID. Value = displayname
 
       this.namespaceURI = 'quickplans'; // URI for this webapp
     }
@@ -216,6 +216,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             if (!error) { 
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
               self.notes[GUID].text = displayText;
+              self.notes[GUID].GUID = GUID;
             }
             deferred.resolve(displayText);
           });

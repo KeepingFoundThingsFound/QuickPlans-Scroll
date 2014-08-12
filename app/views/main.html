@@ -44,7 +44,7 @@
       </a>
     </div>
     <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes">
-      <p hallo-note ng-model="note.text" data-associations="item">{{ note.text }}</p>
+      <p hallo-note ng-model="note.text">{{ note.text }}</p>
       <div class="endnote-text">
         <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>
         <a class="pull-right" href="#"><span class="glyphicon glyphicon-trash"></span></a>

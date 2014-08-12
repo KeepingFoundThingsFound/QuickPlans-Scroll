@@ -59,7 +59,6 @@ directives.directive('halloNote', function() {
       return {
           restrict: 'E A',
           require: '?ngModel',
-          scope: { associations: '=' },
           link: function(scope, element, attrs, ngModel) {
               if (!ngModel) {
                 console.log("No ng-model");
@@ -75,21 +74,15 @@ directives.directive('halloNote', function() {
               };
 
               element.on('hallodeactivated', function() {
-                 //If user leaves field blank then revert to temp title
-                if(element.html == '') {
-                  scope.listitem.title = scope.listitem.tempTitle;
-                  ngModel.$setViewValue(scope.listitem.title);
-                }
                  //Rename the list item only if the user has changed it
-                if(scope.listitem.title !== element.html()) {
+                if(scope.note.text !== element.html()) {
                    //Update the local model
                   ngModel.$setViewValue(element.html());
                   console.log(scope);
-                  scope.listitem.tempTitle = element.html();
-                  scope.listitem.title = element.html();
+                  scope.note.text = element.html();
                   scope.$apply();
                    //Have itemMirror rename the folder
-                   scope.listitem.renameItem();
+                  scope.currentList.selfIM.setAssociationDisplayText(scope.note.GUID, scope.note.text);
                 }
               });
 
