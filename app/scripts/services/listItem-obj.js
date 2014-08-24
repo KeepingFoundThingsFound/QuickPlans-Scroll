@@ -47,6 +47,18 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             return error; 
           });
         },
+	
+	deletePhantomNote : function(guid) {
+	  var self = this;
+          return this.parentIM.deleteAssociation(guid)
+          .then(function(result) { -+
+		
+            self.parentIM.refresh();
+            return result; 
+          }, function(error) { 
+            return error; 
+          });
+	},
 
   			renameItem : function() {
           var self = this;
@@ -104,7 +116,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             return error; 
           });
         },
-  			deleteItem : function() {
+  	  deleteItem : function() {
           var self = this;
           return this.parentIM.deleteAssociation(this.guid)
           .then(function(result) { -+

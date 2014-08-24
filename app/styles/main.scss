@@ -190,7 +190,12 @@ li{
     margin-bottom: 5pt;
 }
 .priority-0 {
-    color: #E6B800;
+    //color: #E6B800;
+}
+
+.selectedLI {
+    //color: #E6B800;
+    background-color: LightGrey;
 }
 
 

@@ -59,7 +59,11 @@ define(['./module','angular'],
 
     $scope.showNotes = function(scope) {
       var listItem = scope.$modelValue;
-
+      
+      console.log(angular.element('div.angular-ui-tree').children('div.selectedLI'));
+      angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
+      scope.$element.addClass("selectedLI");
+      
       $scope.currentTitle = listItem.title;
       $scope.currentList = listItem;
       // displaytext and associateditem (url)
@@ -83,6 +87,13 @@ define(['./module','angular'],
       }, function(error) { console.log('Error:' + error); });
     };
 
+    $scope.deleteNote = function(scope, note){
+      scope.deletePhantomNote(note.GUID)
+        .then(function(){
+          delete $scope.currentNotes[note.GUID];
+        },function(error) { console.log('Error:' + error) });
+      
+    }
 
     $scope.delete = function(scope) {
       var listItem = scope.$modelValue;
