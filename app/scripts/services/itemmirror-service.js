@@ -71,7 +71,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
         if(this.itemMirror) { 
-          this.itemMirror.sync(function(error) {
+          this.itemMirror.refresh(function(error) {
             if (error) { deferred.reject(error); }
             console.log('ItemMirror object synced');
             deferred.resolve(self);
@@ -99,6 +99,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       // Create an itemMirror object based on a specific GUID
       createItemMirrorForAssociatedGroupingItem : function(GUID) {
         var self = this;
+        /**
         var deferred = $q.defer();
         this.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID, function(error, itemMirror) {
           if (error) { deferred.reject(error); }
@@ -107,6 +108,9 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           imObj.itemMirror = itemMirror;
           deferred.resolve(itemMirror);
         });
+        **/
+        var imObj = new IM(self.dropboxClient);
+        imObj.itemMirror = this.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID);
       },
 
       // Return an array of itemMirror objects from an array of GUIDs
@@ -116,6 +120,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         // Map the GUIDs into an array of promises
         var promises = GUIDs.map(function(GUID) {
           var deferred = $q.defer();
+          /**
           self.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID, function(error, itemMirror) {
             if (error) { deferred.reject(error); }
 
@@ -125,6 +130,11 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             imObj.GUID = GUID;
             deferred.resolve(imObj);
           });
+          **/
+        var imObj = new IM(self.dropboxClient);
+        imObj.itemMirror = this.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID);
+        imObj.GUID = GUID;
+        deferred.resolve(imObj);
           return deferred.promise;
         });
         return $q.all(promises);
@@ -195,6 +205,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       // Gets array of GUIDs
       getAssociationGUIDs : function() {
         var self = this;
+        /**
         var deferred = $q.defer();
         this.itemMirror.listAssociations(function (error, GUIDs) {
           if (error) { deferred.reject(error); }
@@ -203,6 +214,12 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           deferred.resolve(GUIDs);
         });
         return deferred.promise;
+        **/
+        var deferred = $q.defer();
+        var GUIDs = this.itemMirror.listAssociations();
+        self.associationGUIDs = GUIDs;
+        deferred.resolve(GUIDs)
+        return deferred.promise;;
       },
 
       // Gets display names of a GUID array
@@ -212,6 +229,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var GUIDs = this.phantomGUIDs;
         var promises = GUIDs.map(function(GUID) {
           var deferred  = $q.defer();
+          
+          /**
           self.itemMirror.getAssociationDisplayText(GUID, function(error, displayText) {
             if (!error) { 
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
@@ -220,6 +239,13 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             }
             deferred.resolve(displayText);
           });
+          **/
+          
+          var displayText = self.itemMirror.getAssociationDisplayText(GUID);
+          if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
+              self.notes[GUID].text = displayText;
+              self.notes[GUID].GUID = GUID;
+          deferred.resolve(displayText);
           return deferred.promise;
         });
         return $q.all(promises);
@@ -230,6 +256,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var GUIDs = this.phantomGUIDs;
         var promises = GUIDs.map(function(GUID) {
           var deferred  = $q.defer();
+          
+          /**
           self.itemMirror.getAssociationAssociatedItem(GUID, function(error, url) {
             if (!error) { 
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
@@ -237,6 +265,13 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             }
             deferred.resolve(url);
           });
+          **/
+          
+          
+          var url = self.itemMirror.getAssociationAssociatedItem(GUID);
+          if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
+            self.notes[GUID].url = url;
+          deferred.resolve(url);
           return deferred.promise;
         });
         return $q.all(promises);
@@ -247,6 +282,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var promises = GUIDs.map(function(GUID) {
           var deferred  = $q.defer();
+          
+          /**
           self.itemMirror.getAssociationDisplayText(GUID, function(error, displayText) {
             if (error) { deferred.reject(error); }
 
@@ -256,6 +293,12 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
             deferred.resolve(item);
           });
+          **/
+          var item;
+          item.GUID = GUID;
+          item.title = self.itemMirror.getAssociationDisplayText(GUID);
+          deferred.resolve(item);
+          
           return deferred.promise;
         });
         return $q.all(promises);
@@ -270,10 +313,17 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var GUID = assocIM.GUID;
         //console.log(GUID);
         if(GUID) {
+          
+          /**
           this.itemMirror.addAssociationNamespaceAttribute(attributeName, GUID, this.namespaceURI, function(error) {
             //if(error) { console.log('Attribute already exists: ' + error); }
             deferred.resolve(assocIM);
+            
           });
+          **/
+          
+          this.itemMirror.addAssociationNamespaceAttribute(attributeName, null, GUID, this.namespaceURI);
+          
         } else { 
           deferred.resolve(assocIM);
         }
@@ -285,11 +335,17 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var deferred = $q.defer();
         var GUID = assocIM.GUID;
         if(GUID) {
+          
+          /**
           this.itemMirror.getAssociationNamespaceAttribute(attributeName, GUID, this.namespaceURI, function(error, associationNamespaceAttribute) {
             if (error) { console.log(error); }
             assocIM[attributeName] = associationNamespaceAttribute || 0;
             deferred.resolve(assocIM);
           });
+          **/
+          
+          assocIM[attributeName] = this.itemMirror.getAssociationNamespaceAttribute(attributeName, GUID, this.namespaceURI) || 0;
+          deferred.resolve(assocIM);
         } else { 
           deferred.resolve(assocIM);
         }
@@ -301,11 +357,17 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var deferred = $q.defer();
         var GUID = assocIM.GUID;
         if(GUID) {
+          
+          /**
           this.itemMirror.setAssociationNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI, function(error) {
             if (error) { deferred.reject(error); }
             assocIM[attributeName] = attributeValue;
             deferred.resolve(assocIM);
           });
+          **/
+          this.itemMirror.setAssociationNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI);
+          assocIM[attributeName] = attributeValue;
+          deferred.resolve(assocIM);
         } else {
           deferred.resolve(assocIM);
         }
@@ -315,12 +377,19 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       getDisplayName : function() {
         var self = this;
         var deferred = $q.defer();
+        
+        /**
         this.itemMirror.getDisplayName(function(error, displayName) {
           if (error) { deferred.reject(error); }
           self.displayName = displayName;
           // Return the whole IM object so this method can be used in chaining
           deferred.resolve(self);
         });
+        **/
+        
+        self.displayName = this.itemMirror.getDisplayName();
+        deferred.resolve(self);
+        
         return deferred.promise;
       },
 
@@ -330,6 +399,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         // Map the GUIDs into an array of promises
         var promises = this.associationGUIDs.map(function(GUID) {
           var deferred  = $q.defer();
+          
+          /**
           self.itemMirror.isAssociatedItemGrouping(GUID, function(error, isGroupingItem) {
             // Removed error handling: resolve errors with a null value
             // Return GUID string only for grouping items
@@ -343,6 +414,18 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
               deferred.resolve(null); 
             }
           });
+          **/
+          
+          if(self.itemMirror.isAssociationAssociatedItemGrouping(GUID)){
+            deferred.resolve(GUID); 
+          }else{
+            // Store GUIDS for phantom assoc in local array so they can be used later
+              self.phantomGUIDs.push(GUID);
+              // Return null value to be filtered out below
+              // It's necessary to return some value in order for q.all to succeed
+              deferred.resolve(null); 
+          }
+          
           return deferred.promise;
         });
         // After promises are resolved, filter out null values and return resulting GUIDs
@@ -354,21 +437,33 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         });
       },
 
-      isAssociatedItemGrouping : function(GUID) {
+      isAssociationAssociatedItemGrouping : function(GUID) {
         var deferred = $q.defer();
+        
+        /**
         this.itemMirror.isAssociatedItemGrouping(GUID, function(error, isGroupingItem) {
           if (error) { deferred.reject(error); }
           deferred.resolve(isGroupingItem);
         });
+        **/
+        
+        deferred.resolve(this.itemMirror.isAssociationAssociatedItemGrouping(GUID));
+        
         return deferred.promise;
       },
 
       listAssociationNamespaceAttributes : function(GUID) {
         var deferred = $q.defer();
+        
+        /**
         this.itemMirror.listAssociationNamespaceAttributes(GUID, this.namespaceURI, function(error, array) {
           if (error) { deferred.reject(error); }
           deferred.resolve(array);
         });
+        **/
+        
+        deferred.resolve(this.itemMirror.listAssociationNamespaceAttributes(GUID, this.namespaceURI));
+        
         return deferred.promise;
       },
 
@@ -376,6 +471,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
         console.log(destinationItemMirror);
+        
+        
         this.itemMirror.moveAssociation(GUID, destinationItemMirror, function(error) {
           if (error) { console.log(error); deferred.reject(error); }
           deferred.resolve('Item moved to new folder');
@@ -386,34 +483,51 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           //  deferred.resolve(self);
           //});
         });
+        
+        
         return deferred.promise;   
       },
       
       // Not yet implemented in the itemMirror library
       renameLocalItem : function(GUID, newName) {
         var deferred = $q.defer();
+        
         this.itemMirror.renameLocalItem(GUID, newName, function(error) {
           if (error) { deferred.reject(error); }
           deferred.resolve('Item renamed');
         });
+        
         return deferred.promise; 
       },
 
       setAssociationDisplayText : function(GUID, displayText) {
         var deferred = $q.defer();
+        
+        /**
         this.itemMirror.setAssociationDisplayText(GUID, displayText, function(error) {
           if (error) { deferred.reject(error); }
           deferred.resolve('Display text updated');
         });
+        **/
+        
+        this.itemMirror.setAssociationDisplayText(GUID, displayText);
+        deferred.resolve('Display text updated');
+        
         return deferred.promise; 
       },
 
       setFragmentNamespaceAttribute : function(attributeName, attributeValue, GUID) {
         var deferred = $q.defer();
+        
+        /**
         this.itemMirror.setFragmentNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI, function(error) {
           if (error) { deferred.reject(error); }
           deferred.resolve(attributeName + ' attribute assigned value ' + attributeValue);
         });
+        **/
+        
+        this.itemMirror.setFragmentNamespaceAttribute(attributeName, attributeValue, this.namespaceURI);
+        deferred.resolve(attributeName + ' attribute assigned value ' + attributeValue);
         return deferred.promise; 
       }
 
