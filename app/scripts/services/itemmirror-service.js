@@ -20,6 +20,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
       // Staring folder in Dropbox
              // Staring folder in Dropbox
+             
       if (/#\/(.*)/.exec(window.location.href)) {
         this.groupingItemURI = decodeURI(/#\/(.*)/.exec(window.location.href)[1]);
         // this.groupingItemURI = '/';
@@ -99,7 +100,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       // Create an itemMirror object based on a specific GUID
       createItemMirrorForAssociatedGroupingItem : function(GUID) {
         var self = this;
-        /**
+
         var deferred = $q.defer();
         this.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID, function(error, itemMirror) {
           if (error) { deferred.reject(error); }
@@ -108,9 +109,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           imObj.itemMirror = itemMirror;
           deferred.resolve(itemMirror);
         });
-        **/
-        var imObj = new IM(self.dropboxClient);
-        imObj.itemMirror = this.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID);
+
       },
 
       // Return an array of itemMirror objects from an array of GUIDs
@@ -120,7 +119,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         // Map the GUIDs into an array of promises
         var promises = GUIDs.map(function(GUID) {
           var deferred = $q.defer();
-          /**
+          
           self.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID, function(error, itemMirror) {
             if (error) { deferred.reject(error); }
 
@@ -130,11 +129,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             imObj.GUID = GUID;
             deferred.resolve(imObj);
           });
-          **/
-        var imObj = new IM(self.dropboxClient);
-        imObj.itemMirror = this.itemMirror.createItemMirrorForAssociatedGroupingItem(GUID);
-        imObj.GUID = GUID;
-        deferred.resolve(imObj);
+
           return deferred.promise;
         });
         return $q.all(promises);
@@ -323,7 +318,12 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           **/
           
           this.itemMirror.addAssociationNamespaceAttribute(attributeName, null, GUID, this.namespaceURI);
-          
+          this.itemMirror.save(function(error){
+            if (error) {
+              console.log("itemMirror has encountered an error while saving");
+            }
+          });
+          deferred.resolve(assocIM);
         } else { 
           deferred.resolve(assocIM);
         }
@@ -343,7 +343,6 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             deferred.resolve(assocIM);
           });
           **/
-          
           assocIM[attributeName] = this.itemMirror.getAssociationNamespaceAttribute(attributeName, GUID, this.namespaceURI) || 0;
           deferred.resolve(assocIM);
         } else { 
@@ -386,7 +385,6 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           deferred.resolve(self);
         });
         **/
-        
         self.displayName = this.itemMirror.getDisplayName();
         deferred.resolve(self);
         
