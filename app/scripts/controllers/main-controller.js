@@ -27,6 +27,14 @@ define(['./module','angular'],
       
       // Test flag
       $scope.status = true;
+      
+      // watch, use 'true' to also receive updates when values
+      // change, instead of just the reference
+      /**
+      $scope.$watch("currentNotes", function(order) {
+        console.log("currentNotes: " + order.map(function(e){return e.order}).join(','));
+      },true);
+      **/
     });
 
     // Angular UI Tree Options
@@ -60,7 +68,6 @@ define(['./module','angular'],
     $scope.showNotes = function(scope) {
       var listItem = scope.$modelValue;
       
-      console.log(angular.element('div.angular-ui-tree').children('div.selectedLI'));
       angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
       scope.$element.addClass("selectedLI");
       
@@ -82,7 +89,6 @@ define(['./module','angular'],
           listItem.getPhantomNotes()
           .then(function(result) {
             $scope.currentNotes = result;
-            console.log($scope.currentNotes);
           }, function(error) { console.log('Error:' + error); });
       }, function(error) { console.log('Error:' + error); });
     };

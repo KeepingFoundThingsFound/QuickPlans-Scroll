@@ -43,12 +43,19 @@
         <span class="pull-right glyphicon glyphicon-plus"></span>
       </a>
     </div>
-    <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes">
-      <p hallo-note ng-model="note.text">{{ note.text }}</p>
-      <div class="endnote-text">
-        <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>
-        <a class="pull-right" ng-click="deleteNote(currentList, note)"><span class="glyphicon glyphicon-trash"></span></a>
+    <div sortable="currentNotes">
+      <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes | orderBy:'order'">
+        <p hallo-note ng-model="note.text">{{ note.text }}</p>
+        <div class="endnote-text">
+          <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>
+          <a class="pull-right" ng-click="deleteNote(currentList, note)"><span class="glyphicon glyphicon-trash"></span></a>
+        </div>
       </div>
     </div>
+    <!--
+    <div class="noNotes" ng-hide="Object.keys(currentNotes).length > 0">
+      You have no notes. Click the (+) sign to add a new note
+    </div>
+    -->
   </div>
 </div>

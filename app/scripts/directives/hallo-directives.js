@@ -75,11 +75,11 @@ directives.directive('halloNote', function() {
 
               element.on('hallodeactivated', function() {
                  //Rename the list item only if the user has changed it
-                if(scope.note.text !== element.html()) {
+                if(scope.note.text !== element.text()) {
                    //Update the local model
-                  ngModel.$setViewValue(element.html());
+                  ngModel.$setViewValue(element.text());
                   console.log(scope);
-                  scope.note.text = element.html();
+                  scope.note.text = element.text();
                   scope.$apply();
                    //Have itemMirror rename the folder
                   scope.currentList.selfIM.setAssociationDisplayText(scope.note.GUID, scope.note.text);
@@ -89,6 +89,7 @@ directives.directive('halloNote', function() {
               element.on('keydown', function($event){
                 if($event.which === 13) {
                   $event.preventDefault();
+                  element.blur();
                 }
               });
           }

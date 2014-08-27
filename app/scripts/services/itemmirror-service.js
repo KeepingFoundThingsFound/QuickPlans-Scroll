@@ -177,6 +177,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             if (!error) { 
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
               self.notes[GUID].text = name;
+              self.notes[GUID].GUID = GUID;
             }
           deferred.resolve(GUID);  
         });
@@ -187,6 +188,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var deferred = $q.defer();
         this.itemMirror.deleteAssociation(GUID, function(error) {
           if (error) { deferred.reject(error); }
+          console.log("Item Deleted");
           deferred.resolve('Item Deleted from folder');          
         });
         return deferred.promise;
@@ -210,13 +212,17 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       getPhantomDisplayText : function() {
         var self = this;
         var GUIDs = this.phantomGUIDs;
-        var promises = GUIDs.map(function(GUID) {
+        var promises = GUIDs.map(function(GUID, index) {
           var deferred  = $q.defer();
           self.itemMirror.getAssociationDisplayText(GUID, function(error, displayText) {
             if (!error) { 
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
               self.notes[GUID].text = displayText;
               self.notes[GUID].GUID = GUID;
+              self.itemMirror.getAssociationNamespaceAttribute("order", GUID, self.namespaceURI, function(error, associationNamespaceAttribute) {
+                if (error) { console.log(error); }
+                self.notes[GUID].order = associationNamespaceAttribute || null;
+              });
             }
             deferred.resolve(displayText);
           });
@@ -310,7 +316,22 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           deferred.resolve(assocIM);
         }
         return deferred.promise;
-      },     
+      },
+      
+      setNoteAssociationNamespaceAttribute : function(attributeName, attributeValue, GUID){
+        var self = this;
+        var deferred = $q.defer();
+        if(GUID) {
+          this.itemMirror.setAssociationNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI, function(error) {
+            if (error) { deferred.reject(error); }
+            deferred.resolve(self);
+          });
+        } else {
+          deferred.resolve(self);
+        }
+        return deferred.promise;
+      },
+      
       // Gets the name of the itemMirror object
       getDisplayName : function() {
         var self = this;
