@@ -3,7 +3,7 @@
 
     <!-- Nested list template -->
     <div class="right-title">
-      <span class="glyphicon glyphicon-th-list"></span> {{ projectTitle }}
+      <span class="glyphicon glyphicon-th-list"></span> <a ng-click="showNotes(root)" ng-model="root">{{ projectTitle }}</a>
       <div id="facebookG" class="pull-right" ng-hide="loaded">
         <div id="blockG_1" class="facebook_blockG"></div>
         <div id="blockG_2" class="facebook_blockG"></div>

@@ -18,9 +18,11 @@ define(['./module','angular'], function (directives,angular) {
         $(element[0]).sortable({
             items:'div.note',
             start:function (event, ui) {
-                // on start we define where the item is dragged from
-                startIndex = ($(ui.item).index());
+                    // on start we define where the item is dragged from
+                    startIndex = ($(ui.item).index());
             },
+            handle:'*:not(p)',
+            delay: 50,
             stop:function (event, ui) {
                 // on stop we determine the new index of the
                 // item and store it there
@@ -47,7 +49,7 @@ define(['./module','angular'], function (directives,angular) {
                 
             },
             axis:'y'
-        })
+        }).enableSelection();
         }
     });
     

@@ -19,7 +19,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       };
 
       // Staring folder in Dropbox
-             // Staring folder in Dropbox
+      // Staring folder in Dropbox
       if (/#\/(.*)/.exec(window.location.href)) {
         this.groupingItemURI = decodeURI(/#\/(.*)/.exec(window.location.href)[1]);
         // this.groupingItemURI = '/';

@@ -16,17 +16,23 @@ define(['./module','angular'],
       }
 
       $scope.root = result;
+      
       $scope.list = result.items;
       $scope.loaded = true;
-
-      $scope.projectTitle = 'Folder Items';
-      $scope.currentTitle = 'Notes and Files';
-      $scope.currentNotes = [];
+      
+      var title = result.selfIM.groupingItemURI;
+      $scope.root.title = title;
+      $scope.projectTitle = title;
+      $scope.showNotes($scope.root);
+      //$scope.currentTitle = title;
+      //$scope.currentNotes = [];
 
       $scope.currentList = null;
       
       // Test flag
       $scope.status = true;
+      //make sure listitems are not currently open to editing (usually it's the last listitem created)
+      $('body').focus();
       
       // watch, use 'true' to also receive updates when values
       // change, instead of just the reference
@@ -66,10 +72,18 @@ define(['./module','angular'],
     };
 
     $scope.showNotes = function(scope) {
-      var listItem = scope.$modelValue;
+      var listItem;
+      //handle root/title
+      if (scope.$modelValue == undefined){
+        listItem = scope;
+      }else{ //every other case
+        listItem = scope.$modelValue;
+      }
       
       angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
-      scope.$element.addClass("selectedLI");
+      if (scope.$element) {
+        scope.$element.addClass("selectedLI");
+      }
       
       $scope.currentTitle = listItem.title;
       $scope.currentList = listItem;

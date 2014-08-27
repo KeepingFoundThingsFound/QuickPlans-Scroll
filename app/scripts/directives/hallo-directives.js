@@ -35,7 +35,6 @@ define(['./module','angular'], function (directives,angular) {
                 if(scope.listitem.title !== element.html()) {
                   // Update the local model
                   ngModel.$setViewValue(element.html());
-                  console.log(scope);
                   scope.listitem.tempTitle = element.html();
                   scope.listitem.title = element.html();
                   scope.$apply();
@@ -78,14 +77,22 @@ directives.directive('halloNote', function() {
                 if(scope.note.text !== element.text()) {
                    //Update the local model
                   ngModel.$setViewValue(element.text());
-                  console.log(scope);
                   scope.note.text = element.text();
                   scope.$apply();
                    //Have itemMirror rename the folder
                   scope.currentList.selfIM.setAssociationDisplayText(scope.note.GUID, scope.note.text);
                 }
               });
-
+              
+              element.on('halloactivated', function() {
+                console.log('clicked on note, hallo activated');
+              });
+              /**
+              element.on('click', function(event) {
+                event.stopPropagation();
+                element.focus();
+              });
+              **/
               element.on('keydown', function($event){
                 if($event.which === 13) {
                   $event.preventDefault();
