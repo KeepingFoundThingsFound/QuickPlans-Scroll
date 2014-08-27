@@ -54,7 +54,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 	      i++;
 	    };
 	    while(unassignedNotes.length > 0){
-	      notesArray.push(unassignedNotes.pop());
+	      notesArray.unshift(unassignedNotes.pop());
 	    };
 	    // save the ordering and persist it in ItemMirror
 	    for(var j = 0; j < notesArray.length; j++){

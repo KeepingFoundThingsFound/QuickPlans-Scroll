@@ -59,7 +59,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       this.priority = 0; // object of association attributes to be assigned to LI
 
       this.associationGUIDs = [];      // string array of all GUIDs
-      this.phantomGUIDs = [];    // string array of phantom assoc GUIDs only
+      this.allGUIDs = [];    // string array of phantom assoc GUIDs only
       this.notes = {};          // key-value object. Key = GUID. Value = displayname
 
       this.namespaceURI = 'quickplans'; // URI for this webapp
@@ -211,7 +211,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       // Use for PHANTOM ASSOCIATIONS
       getPhantomDisplayText : function() {
         var self = this;
-        var GUIDs = this.phantomGUIDs;
+        var GUIDs = this.allGUIDs;
         var promises = GUIDs.map(function(GUID, index) {
           var deferred  = $q.defer();
           self.itemMirror.getAssociationDisplayText(GUID, function(error, displayText) {
@@ -233,7 +233,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
       getPhantomURL : function() {
         var self = this;
-        var GUIDs = this.phantomGUIDs;
+        var GUIDs = this.allGUIDs;
         var promises = GUIDs.map(function(GUID) {
           var deferred  = $q.defer();
           self.itemMirror.getAssociationAssociatedItem(GUID, function(error, url) {
@@ -354,11 +354,12 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           self.itemMirror.isAssociatedItemGrouping(GUID, function(error, isGroupingItem) {
             // Removed error handling: resolve errors with a null value
             // Return GUID string only for grouping items
+            // Store ALL GUIDS for phantom and real assoc in local array so they can be used later
+              self.allGUIDs.push(GUID);
             if(isGroupingItem) { 
               deferred.resolve(GUID); 
             } else {
-              // Store GUIDS for phantom assoc in local array so they can be used later
-              self.phantomGUIDs.push(GUID);
+              
               // Return null value to be filtered out below
               // It's necessary to return some value in order for q.all to succeed
               deferred.resolve(null); 

@@ -44,7 +44,7 @@
       </a>
     </div>
     <div sortable="currentNotes">
-      <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes | orderBy:'order'">
+      <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes">
         <p hallo-note ng-model="note.text">{{ note.text }}</p>
         <div class="endnote-text">
           <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>

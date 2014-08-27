@@ -42,6 +42,7 @@ define(['./module','angular'], function (directives,angular) {
                   scope.listitem.renameItem();
                 }
               });
+              
 
               element.on('keydown', function($event){
                 if($event.which === 13) {
@@ -84,15 +85,6 @@ directives.directive('halloNote', function() {
                 }
               });
               
-              element.on('halloactivated', function() {
-                console.log('clicked on note, hallo activated');
-              });
-              /**
-              element.on('click', function(event) {
-                event.stopPropagation();
-                element.focus();
-              });
-              **/
               element.on('keydown', function($event){
                 if($event.which === 13) {
                   $event.preventDefault();

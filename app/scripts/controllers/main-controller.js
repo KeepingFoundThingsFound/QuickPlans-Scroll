@@ -23,16 +23,16 @@ define(['./module','angular'],
       var title = result.selfIM.groupingItemURI;
       $scope.root.title = title;
       $scope.projectTitle = title;
+      $scope.currentList = null;
       $scope.showNotes($scope.root);
       //$scope.currentTitle = title;
       //$scope.currentNotes = [];
 
-      $scope.currentList = null;
+      
       
       // Test flag
       $scope.status = true;
       //make sure listitems are not currently open to editing (usually it's the last listitem created)
-      $('body').focus();
       
       // watch, use 'true' to also receive updates when values
       // change, instead of just the reference
@@ -103,6 +103,7 @@ define(['./module','angular'],
           listItem.getPhantomNotes()
           .then(function(result) {
             $scope.currentNotes = result;
+            
           }, function(error) { console.log('Error:' + error); });
       }, function(error) { console.log('Error:' + error); });
     };
