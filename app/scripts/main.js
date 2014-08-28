@@ -20,15 +20,6 @@ require.config({
     'sass-bootstrap': '../bower_components/sass-bootstrap/dist/js/bootstrap'
   },
   shim: {
-    angular: {
-      exports: 'angular'
-    },
-    'angular-route': [
-      'angular'
-    ],
-    'angular-ui-tree': [
-      'angular'
-    ],
     jQuery: {
       exports: 'jQuery'
     },
@@ -42,9 +33,19 @@ require.config({
       'jQuery',
       'jQuery-UI',
       'Rangy'
+    ],
+    angular: {
+      exports: 'angular'
+    },
+    'angular-route': [
+      'angular'
+    ],
+    'angular-ui-tree': [
+      'angular'
     ]
   },
   priority: [
+    'Hallo',
     'angular'
   ]
 });
@@ -52,8 +53,7 @@ require.config({
 // Initialize the app
 require(['jQuery', 'angular', 'angular-route', 'angular-ui-tree', 'dropbox', 'ItemMirror', 'Hallo', 'app', 'routes'],
   function ($, angular, Dropbox, ItemMirror, Hallo, app, routes) {
-    'use strict';   
-
+    'use strict';
     // Confirm dependencies
     // console.log('jquery: ' + typeof($));
     // console.log('ItemMirror: ' + typeof(ItemMirror));
@@ -62,4 +62,4 @@ require(['jQuery', 'angular', 'angular-route', 'angular-ui-tree', 'dropbox', 'It
     $(function () { // using jQuery because it will run this even if DOM load already happened
       angular.bootstrap(document, ['app']);
     });
-});
+  });
