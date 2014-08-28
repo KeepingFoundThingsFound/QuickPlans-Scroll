@@ -106,11 +106,11 @@ function toggleLoadingSpin($DomObj, On){
     
 //TODO make it so you can pass in a delimiter
 function modalFolderSelectList(ItemMirror) {
-      var DELIMITER = "#/";
+      var DELIMITER = "#";
       var MAXFOLDERS = 200;
       
       
-      DELIMITER = "#/";
+      DELIMITER = "#";
       MAXFOLDERS = 200;
       
       groupingItemURI = "/";
