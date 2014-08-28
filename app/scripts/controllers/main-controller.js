@@ -80,6 +80,10 @@ define(['./module','angular'],
         listItem = scope.$modelValue;
       }
       
+      if (scope.tempTitle == 'root') {
+        angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
+      }
+      
       if (scope.$element) {
         angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
         scope.$element.addClass("selectedLI");

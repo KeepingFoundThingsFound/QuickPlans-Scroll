@@ -118,10 +118,10 @@ directives.directive('halloNote', function() {
 
               element.children('p').on('hallodeactivated', function() {
                  //Rename the list item only if the user has changed it
-                if(scope.note.text !== element.text()) {
+                if(scope.note.text !== element.children('p').text()) {
                    //Update the local model
-                  ngModel.$setViewValue(element.text());
-                  scope.note.text = element.text();
+                  ngModel.$setViewValue(element.children('p').text());
+                  scope.note.text = element.children('p').text();
                   scope.$apply();
                    //Have itemMirror rename the folder
                   scope.currentList.selfIM.itemMirror._fragmentDriver.setAssociationAssociatedItem(scope.note.GUID, scope.note.url, function(error){
