@@ -11,7 +11,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="items_renderer.html">
-      <div ui-tree-handle ng-click="showNotes(this)">
+      <div ui-tree-handle id={{item.guid}} ng-click="showNotes(this)">
         <div class="toggle-arrow">
           <a data-nodrag ng-click="toggle(this)">
             <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
@@ -48,6 +48,7 @@
         <p hallo-note ng-model="note.text">{{ note.text }}</p>
         <div class="endnote-text">
           <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>
+          <a ng-show="isFolder(note.GUID)" ng-click="showNotesFromGUID(note.GUID)">&nbsp<span class="glyphicon glyphicon-folder-open"></span></a>
           <a class="pull-right" ng-click="deleteNote(currentList, note)"><span class="glyphicon glyphicon-trash"></span></a>
         </div>
       </div>

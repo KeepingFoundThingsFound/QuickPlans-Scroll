@@ -80,8 +80,8 @@ define(['./module','angular'],
         listItem = scope.$modelValue;
       }
       
-      angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
       if (scope.$element) {
+        angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
         scope.$element.addClass("selectedLI");
       }
       
@@ -93,6 +93,18 @@ define(['./module','angular'],
         $scope.currentNotes = result;
       }, function(error) { console.log('Error:' + error); });
     };
+    
+    $scope.showNotesFromGUID = function(GUID) {
+      var matchIndex = -1;
+      for(var i = 0; i < $scope.currentList.items.length; i++){
+        if ($scope.currentList.items[i].guid == GUID) {
+          matchIndex = i;
+        }
+      }
+      angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
+      $scope.showNotes($scope.currentList.items[matchIndex]);
+      angular.element('#' + GUID).addClass("selectedLI");
+    }
     
     $scope.addNote = function(scope) {
       var listItem = scope;
@@ -135,7 +147,14 @@ define(['./module','angular'],
       dropboxAuth.disconnectDropbox();
       console.log('Disconnected Dropbox from app');
     };
-
+    
+    $scope.isFolder = function(GUID) {
+      if ($.inArray(GUID, $scope.currentList.selfIM.listitemGUIDs) != -1) {
+        return true;
+      }else{
+        return false;
+      }
+    }
 
   }]);
 });
