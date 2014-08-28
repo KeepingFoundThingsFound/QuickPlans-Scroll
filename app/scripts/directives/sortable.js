@@ -21,7 +21,7 @@ define(['./module','angular'], function (directives,angular) {
                     // on start we define where the item is dragged from
                     startIndex = ($(ui.item).index());
             },
-            handle:'*:not(p)',
+            handle:'*:not(p,p.web-link)',
             delay: 50,
             stop:function (event, ui) {
                 // on stop we determine the new index of the

@@ -154,8 +154,11 @@ define(['./module','angular'],
       }else{
         return false;
       }
+    };
+    
+    $scope.isWebURL = function(URL){
+      return /\b(https?|ftp|file):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|‌​]/.test(URL);
     }
-
   }]);
 });
 

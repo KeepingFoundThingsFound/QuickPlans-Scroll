@@ -94,6 +94,55 @@ directives.directive('halloNote', function() {
           }
       };
   });
+
+  directives.directive('halloEndnote', function() {
+      return {
+          restrict: 'E A',
+          require: '?ngModel',
+          link: function(scope, element, attrs, ngModel) {
+              if (!ngModel) {
+                console.log("No ng-model");
+                  return;
+              }
+              
+            element.children('a').children('span.glyphicon-pencil').on('click', function(){
+                element.children('p').hallo({
+                    plugins: {}
+                });
+                element.children('p').focus();
+            });
+
+              //ngModel.$render = function() {
+              //    element.html(ngModel.$viewValue || '');
+              //};
+
+              element.children('p').on('hallodeactivated', function() {
+                 //Rename the list item only if the user has changed it
+                if(scope.note.text !== element.text()) {
+                   //Update the local model
+                  ngModel.$setViewValue(element.text());
+                  scope.note.text = element.text();
+                  scope.$apply();
+                   //Have itemMirror rename the folder
+                  scope.currentList.selfIM.itemMirror._fragmentDriver.setAssociationAssociatedItem(scope.note.GUID, scope.note.url, function(error){
+                    if (error) {
+                        console.log(error);
+                    }
+                  });
+                  element.children('p').hallo({editable: false});
+                }
+              });
+              
+              element.children('p').on('keydown', function($event){
+                if($event.which === 13) {
+                  $event.preventDefault();
+                  element.children('p').blur();
+                }
+              });
+              
+          }
+      };
+  });
   
 });
 
