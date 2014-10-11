@@ -3,7 +3,7 @@
 
     <!-- Nested list template -->
     <div class="right-title">
-      <span class="glyphicon glyphicon-th-list"></span> {{ projectTitle }}
+      <span class="glyphicon glyphicon-th-list"></span> <a ng-click="showNotes(root)" ng-model="root">{{ projectTitle }}</a>
       <div id="facebookG" class="pull-right" ng-hide="loaded">
         <div id="blockG_1" class="facebook_blockG"></div>
         <div id="blockG_2" class="facebook_blockG"></div>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="items_renderer.html">
-      <div ui-tree-handle ng-click="showNotes(this)">
+      <div ui-tree-handle id={{item.guid}} ng-click="showNotes(this)">
         <div class="toggle-arrow">
           <a data-nodrag ng-click="toggle(this)">
             <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
@@ -43,12 +43,22 @@
         <span class="pull-right glyphicon glyphicon-plus"></span>
       </a>
     </div>
-    <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes">
-      <p hallo-note ng-model="note.text">{{ note.text }}</p>
-      <div class="endnote-text">
-        <a class="web-link pull-left" href="{{ note.url }}">{{ note.url }}</a>
-        <a class="pull-right" ng-click="deleteNote(currentList, note)"><span class="glyphicon glyphicon-trash"></span></a>
+    <div sortable="currentNotes">
+      <div class="note" ng-model="currentNotes" ng-repeat="note in currentNotes">
+        <p hallo-note ng-model="note.text">{{ note.text }}</p>
+        <div hallo-endnote ng-model="note.url" class="endnote-text">
+          <a class="pull-left"  ng-show="isWebURL(note.url)" href="{{note.url}}"><span class="glyphicon glyphicon-link"></span></a>
+          <a class="pull-left"  ng-show="isFolder(note.GUID)" ng-click="showNotesFromGUID(note.GUID)"><span class="glyphicon glyphicon-folder-open"></span></a>
+          <p class="web-link pull-left">{{ note.url }}</p>
+          <a class="pull-left" ng-hide="isFolder(note.GUID)"><span class="glyphicon glyphicon-pencil"></span></a>
+          <a class="pull-right" ng-click="deleteNote(currentList, note)"><span class="glyphicon glyphicon-trash"></span></a>
+        </div>
       </div>
     </div>
+    <!--
+    <div class="noNotes" ng-hide="Object.keys(currentNotes).length > 0">
+      You have no notes. Click the (+) sign to add a new note
+    </div>
+    -->
   </div>
 </div>

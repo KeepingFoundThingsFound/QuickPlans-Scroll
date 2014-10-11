@@ -19,8 +19,6 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       };
 
       // Staring folder in Dropbox
-             // Staring folder in Dropbox
-             
       if (/#\/(.*)/.exec(window.location.href)) {
         this.groupingItemURI = decodeURI(/#\/(.*)/.exec(window.location.href)[1]);
         // this.groupingItemURI = '/';
@@ -60,7 +58,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       this.priority = 0; // object of association attributes to be assigned to LI
 
       this.associationGUIDs = [];      // string array of all GUIDs
-      this.phantomGUIDs = [];    // string array of phantom assoc GUIDs only
+      this.orderedGUIDs = [];    // string array of sorted assoc GUIDs
+      this.listitemGUIDs = [];   // string array of list items (groupingItem GUIDs)
       this.notes = {};          // key-value object. Key = GUID. Value = displayname
 
       this.namespaceURI = 'quickplans'; // URI for this webapp
@@ -182,6 +181,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             if (!error) { 
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
               self.notes[GUID].text = name;
+              self.notes[GUID].GUID = GUID;
             }
           deferred.resolve(GUID);  
         });
@@ -192,6 +192,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var deferred = $q.defer();
         this.itemMirror.deleteAssociation(GUID, function(error) {
           if (error) { deferred.reject(error); }
+          console.log("Item Deleted");
           deferred.resolve('Item Deleted from folder');          
         });
         return deferred.promise;
@@ -221,8 +222,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       // Use for PHANTOM ASSOCIATIONS
       getPhantomDisplayText : function() {
         var self = this;
-        var GUIDs = this.phantomGUIDs;
-        var promises = GUIDs.map(function(GUID) {
+        var GUIDs = this.orderedGUIDs;
+        var promises = GUIDs.map(function(GUID, index) {
           var deferred  = $q.defer();
           
           /**
@@ -231,6 +232,10 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
               if(self.notes[GUID] === undefined) { self.notes[GUID] = {}; }
               self.notes[GUID].text = displayText;
               self.notes[GUID].GUID = GUID;
+              self.itemMirror.getAssociationNamespaceAttribute("order", GUID, self.namespaceURI, function(error, associationNamespaceAttribute) {
+                if (error) { console.log(error); }
+                self.notes[GUID].order = associationNamespaceAttribute || null;
+              });
             }
             deferred.resolve(displayText);
           });
@@ -248,7 +253,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
       getPhantomURL : function() {
         var self = this;
-        var GUIDs = this.phantomGUIDs;
+        var GUIDs = this.orderedGUIDs;
         var promises = GUIDs.map(function(GUID) {
           var deferred  = $q.defer();
           
@@ -371,7 +376,22 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           deferred.resolve(assocIM);
         }
         return deferred.promise;
-      },     
+      },
+      
+      setNoteAssociationNamespaceAttribute : function(attributeName, attributeValue, GUID){
+        var self = this;
+        var deferred = $q.defer();
+        if(GUID) {
+          this.itemMirror.setAssociationNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI, function(error) {
+            if (error) { deferred.reject(error); }
+            deferred.resolve(self);
+          });
+        } else {
+          deferred.resolve(self);
+        }
+        return deferred.promise;
+      },
+      
       // Gets the name of the itemMirror object
       getDisplayName : function() {
         var self = this;
@@ -402,11 +422,12 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           self.itemMirror.isAssociatedItemGrouping(GUID, function(error, isGroupingItem) {
             // Removed error handling: resolve errors with a null value
             // Return GUID string only for grouping items
+            // Store ALL GUIDS for phantom and real assoc in local array so they can be used later
+              self.orderedGUIDs.push(GUID);
             if(isGroupingItem) { 
+              self.listitemGUIDs.push(GUID);
               deferred.resolve(GUID); 
             } else {
-              // Store GUIDS for phantom assoc in local array so they can be used later
-              self.phantomGUIDs.push(GUID);
               // Return null value to be filtered out below
               // It's necessary to return some value in order for q.all to succeed
               deferred.resolve(null); 

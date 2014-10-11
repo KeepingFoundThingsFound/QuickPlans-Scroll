@@ -1,4 +1,5 @@
 define([
      './hallo-directives',
-     './init-focus'
+     './init-focus',
+     './sortable'
 ], function () {});

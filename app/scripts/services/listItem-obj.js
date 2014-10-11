@@ -29,8 +29,38 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
           return imObj.getPhantomDisplayText()
           .then(function(result) { return imObj.getPhantomURL(); })
-          .then(function(result) { 
-            return imObj.notes; 
+	  .then(function(result) { return imObj.addAssociationNamespaceAttribute('order', imObj);})
+          .then(function(result) {
+	    //Set the Ordering
+	    var notesArray = new Array;
+	    var unassignedNotes = new Array;
+	    angular.forEach(imObj.notes, function(note, key){
+	      if (note.order && note.order != null && note.order !== undefined && notesArray[i] === undefined) {
+	       notesArray[note.order] = note;
+	       delete note.order;
+	      }else{
+		unassignedNotes.push(note);
+	      }
+	    });
+	    var i = 0;
+	    while(i < notesArray.length){
+	      if (notesArray[i] == null){
+		if (unassignedNotes.length > 0) { //allocate notes to empty cells
+		  notesArray[i] = unassignedNotes.pop();
+		}else{ //clean up unneeded empty
+		  notesArray.splice(i, 1);
+		}
+	      }
+	      i++;
+	    };
+	    while(unassignedNotes.length > 0){
+	      notesArray.unshift(unassignedNotes.pop());
+	    };
+	    // save the ordering and persist it in ItemMirror
+	    for(var j = 0; j < notesArray.length; j++){
+	      imObj.setNoteAssociationNamespaceAttribute('order', j, notesArray[j].GUID);
+	    }
+            return notesArray; 
           }, function(error) { 
             return error; 
           });

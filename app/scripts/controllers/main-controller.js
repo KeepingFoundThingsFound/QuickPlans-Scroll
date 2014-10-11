@@ -16,17 +16,31 @@ define(['./module','angular'],
       }
 
       $scope.root = result;
+      
       $scope.list = result.items;
       $scope.loaded = true;
-
-      $scope.projectTitle = 'Folder Items';
-      $scope.currentTitle = 'Notes and Files';
-      $scope.currentNotes = [];
-
+      
+      var title = result.selfIM.groupingItemURI;
+      $scope.root.title = title;
+      $scope.projectTitle = title;
       $scope.currentList = null;
+      $scope.showNotes($scope.root);
+      //$scope.currentTitle = title;
+      //$scope.currentNotes = [];
+
+      
       
       // Test flag
       $scope.status = true;
+      //make sure listitems are not currently open to editing (usually it's the last listitem created)
+      
+      // watch, use 'true' to also receive updates when values
+      // change, instead of just the reference
+      /**
+      $scope.$watch("currentNotes", function(order) {
+        console.log("currentNotes: " + order.map(function(e){return e.order}).join(','));
+      },true);
+      **/
     });
 
     // Angular UI Tree Options
@@ -58,11 +72,22 @@ define(['./module','angular'],
     };
 
     $scope.showNotes = function(scope) {
-      var listItem = scope.$modelValue;
+      var listItem;
+      //handle root/title
+      if (scope.$modelValue == undefined){
+        listItem = scope;
+      }else{ //every other case
+        listItem = scope.$modelValue;
+      }
       
-      console.log(angular.element('div.angular-ui-tree').children('div.selectedLI'));
-      angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
-      scope.$element.addClass("selectedLI");
+      if (scope.tempTitle == 'root') {
+        angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
+      }
+      
+      if (scope.$element) {
+        angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
+        scope.$element.addClass("selectedLI");
+      }
       
       $scope.currentTitle = listItem.title;
       $scope.currentList = listItem;
@@ -73,6 +98,18 @@ define(['./module','angular'],
       }, function(error) { console.log('Error:' + error); });
     };
     
+    $scope.showNotesFromGUID = function(GUID) {
+      var matchIndex = -1;
+      for(var i = 0; i < $scope.currentList.items.length; i++){
+        if ($scope.currentList.items[i].guid == GUID) {
+          matchIndex = i;
+        }
+      }
+      angular.element('div.angular-ui-tree div.selectedLI').removeClass("selectedLI");
+      $scope.showNotes($scope.currentList.items[matchIndex]);
+      angular.element('#' + GUID).addClass("selectedLI");
+    }
+    
     $scope.addNote = function(scope) {
       var listItem = scope;
 
@@ -82,7 +119,7 @@ define(['./module','angular'],
           listItem.getPhantomNotes()
           .then(function(result) {
             $scope.currentNotes = result;
-            console.log($scope.currentNotes);
+            
           }, function(error) { console.log('Error:' + error); });
       }, function(error) { console.log('Error:' + error); });
     };
@@ -114,8 +151,18 @@ define(['./module','angular'],
       dropboxAuth.disconnectDropbox();
       console.log('Disconnected Dropbox from app');
     };
-
-
+    
+    $scope.isFolder = function(GUID) {
+      if ($.inArray(GUID, $scope.currentList.selfIM.listitemGUIDs) != -1) {
+        return true;
+      }else{
+        return false;
+      }
+    };
+    
+    $scope.isWebURL = function(URL){
+      return /\b(https?|ftp|file):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|‌​]/.test(URL);
+    }
   }]);
 });
 
