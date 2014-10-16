@@ -107,10 +107,8 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             return self.selfIM.refresh(); 
           })
           .then(function(result) { 
-            console.log(result); 
             return result; 
           }, function(error) { 
-            console.log('Error: ' + error); 
             return error;
           });
         },

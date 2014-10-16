@@ -106,6 +106,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           // Create a new IM object and assign the itemMirror object to it. Return the complete IM object.
           var imObj = new IM(self.dropboxClient);
           imObj.itemMirror = itemMirror;
+          console.log('Create item mirror for associated Item');
           deferred.resolve(itemMirror);
         });
 
@@ -321,12 +322,14 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             
           });
           **/
-          
-          this.itemMirror.addAssociationNamespaceAttribute(attributeName, null, GUID, this.namespaceURI);
+          console.log("Adding Association Namespace Attribute");
+          this.itemMirror.addAssociationNamespaceAttribute(attributeName, "", GUID, this.namespaceURI);
           this.itemMirror.save(function(error){
             if (error) {
+              console.log(error);
               console.log("itemMirror has encountered an error while saving");
             }
+            console.log("Finished Adding Association Namespace Attribute");
           });
           deferred.resolve(assocIM);
         } else { 
@@ -348,7 +351,9 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             deferred.resolve(assocIM);
           });
           **/
+          console.log("getting assoc ns");
           assocIM[attributeName] = this.itemMirror.getAssociationNamespaceAttribute(attributeName, GUID, this.namespaceURI) || 0;
+          console.log("getting assoc ns");
           deferred.resolve(assocIM);
         } else { 
           deferred.resolve(assocIM);
@@ -360,6 +365,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
         var GUID = assocIM.GUID;
+        console.log("setting assoc ns");
         if(GUID) {
           
           /**
@@ -375,6 +381,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         } else {
           deferred.resolve(assocIM);
         }
+        console.log("setting assoc ns");
         return deferred.promise;
       },
       
@@ -389,6 +396,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         } else {
           deferred.resolve(self);
         }
+        console.log("setting ns");
         return deferred.promise;
       },
       
@@ -439,7 +447,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             deferred.resolve(GUID); 
           }else{
             // Store GUIDS for phantom assoc in local array so they can be used later
-              self.phantomGUIDs.push(GUID);
+              self.orderedGUIDs.push(GUID);
               // Return null value to be filtered out below
               // It's necessary to return some value in order for q.all to succeed
               deferred.resolve(null); 
@@ -480,9 +488,9 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           deferred.resolve(array);
         });
         **/
-        
+        console.log("listing ns");
         deferred.resolve(this.itemMirror.listAssociationNamespaceAttributes(GUID, this.namespaceURI));
-        
+        console.log("listing ns");
         return deferred.promise;
       },
 
@@ -544,9 +552,10 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           deferred.resolve(attributeName + ' attribute assigned value ' + attributeValue);
         });
         **/
-        
+        console.log("setting frag ns");
         this.itemMirror.setFragmentNamespaceAttribute(attributeName, attributeValue, this.namespaceURI);
         deferred.resolve(attributeName + ' attribute assigned value ' + attributeValue);
+        console.log("setting frag ns");
         return deferred.promise; 
       }
 

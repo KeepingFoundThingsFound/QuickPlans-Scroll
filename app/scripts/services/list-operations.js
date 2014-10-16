@@ -12,56 +12,55 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
 
     function buildList() {
       client = dropboxAuth.getClient();
-      console.log(client);
 
       // Create the IM for root and call the recursive helper function to build the whole list
       var deferred = $q.defer();
       var rootIM = new IM(client);
       rootIM.constructItemMirror()
       .then(function(rootIM) {
-
         // Create the ListItem for Root (GUID, title [, parentIM, selfIM])
         // All other list items will be nested in this one
         listItems = new LI('root','root', null, rootIM);  
         sortedListItems = new LI('root','root', null, rootIM); 
-
         return buildTreeRecursive(rootIM, listItems); 
       })
       .then(function(){
-        //console.log('Finished Building List');
         return sortView();
       })
       .then(function() {
-        //console.log('Finished Ordering List');
         deferred.resolve(sortedListItems);
       });
-
       return deferred.promise;
     }
 
     function buildTreeRecursive(imObj,liObj) {
-      //console.log('Called buildTreeRecursive');
+      console.log('Called buildTreeRecursive');
       return imObj.getAssociationGUIDs()
         .then(function(GUIDs) { return imObj.getGroupingItems(GUIDs); })
         .then(function(GUIDs) { return imObj.createIMsForGroupingItems(GUIDs); })
         .then(function(associations) { 
           // Retrieves all display names and sets them as local property for each IM object
-          return $q.all(associations.map(function(assoc) { 
+          return $q.all(associations.map(function(assoc) {
             return assoc.getDisplayName();
           }));
         })
         .then(function(associations) { 
-          // Retrieves all display names and sets them as local property for each IM object
-          return $q.all(associations.map(function(assoc) { 
-            return imObj.addAssociationNamespaceAttribute('priority', assoc);
+          // Adds namespace priority association if one does not already exist
+          return $q.all(associations.map(function(assoc) {
+            if (imObj.getAssociationNamespaceAttribute('priority', assoc) != null) {
+              return imObj.getAssociationNamespaceAttribute('priority', assoc);
+            }else{
+              return imObj.addAssociationNamespaceAttribute('priority', assoc);
+            }
           }));
         })
-        .then(function(associations){
-          //Adds a priority namespace attribute to folders which do not have one
-          return $q.all(associations.map(function(assoc){
-            return imObj.getAssociationNamespaceAttribute('priority', assoc);
-          }));
-        })
+        //.then(function(associations){
+        //  //Adds a priority namespace attribute to folders which do not have one
+        //  return $q.all(associations.map(function(assoc){
+        //    console.log("get priority");
+         //   return imObj.getAssociationNamespaceAttribute('priority', assoc);
+         // }));
+        //})
         .then(function(associations) { 
           currentDepth++;
           return $q.all(associations.map(function(assoc) {
@@ -70,7 +69,6 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             var newListItem = new LI(assoc.GUID, assoc.displayName, imObj, assoc);
             newListItem.priority = assoc.priority;
             liObj.items.push(newListItem);
-            
             // Recursive call with new IM and LI objects
             if(currentDepth < MAXDEPTH) {
               return buildTreeRecursive(assoc, newListItem);
