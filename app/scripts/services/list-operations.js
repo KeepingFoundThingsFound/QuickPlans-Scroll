@@ -34,7 +34,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
     }
 
     function buildTreeRecursive(imObj,liObj) {
-      console.log('Called buildTreeRecursive');
+      //console.log('Called buildTreeRecursive');
       return imObj.getAssociationGUIDs()
         .then(function(GUIDs) { return imObj.getGroupingItems(GUIDs); })
         .then(function(GUIDs) { return imObj.createIMsForGroupingItems(GUIDs); })

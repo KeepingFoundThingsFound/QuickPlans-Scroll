@@ -312,7 +312,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
         var GUID = assocIM.GUID;
-        //console.log(GUID);
+        console.log(GUID);
         if(GUID) {
           
           /**
@@ -351,9 +351,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
             deferred.resolve(assocIM);
           });
           **/
-          console.log("getting assoc ns");
           assocIM[attributeName] = this.itemMirror.getAssociationNamespaceAttribute(attributeName, GUID, this.namespaceURI) || 0;
-          console.log("getting assoc ns");
           deferred.resolve(assocIM);
         } else { 
           deferred.resolve(assocIM);
@@ -365,7 +363,6 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         var self = this;
         var deferred = $q.defer();
         var GUID = assocIM.GUID;
-        console.log("setting assoc ns");
         if(GUID) {
           
           /**
