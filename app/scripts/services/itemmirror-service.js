@@ -81,6 +81,20 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         }
         return deferred.promise;
       },
+      
+      save : function(){
+        var self = this;
+        var deferred = $q.defer();
+        if (this.itemMirror) {
+          this.itemMirror.save(function(error){
+            if (error) {
+              console.log("itemMirror has encountered an error while saving");
+            }else{
+            console.log("Finished Saving Successfully");
+            }
+          });
+        }
+      },
 
       // Use to create first ItemMirror from root or initial folder
       constructItemMirror : function() {
@@ -324,13 +338,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           **/
           console.log("Adding Association Namespace Attribute");
           this.itemMirror.addAssociationNamespaceAttribute(attributeName, "", GUID, this.namespaceURI);
-          this.itemMirror.save(function(error){
-            if (error) {
-              console.log(error);
-              console.log("itemMirror has encountered an error while saving");
-            }
-            console.log("Finished Adding Association Namespace Attribute");
-          });
+          self.save();
           deferred.resolve(assocIM);
         } else { 
           deferred.resolve(assocIM);
@@ -374,6 +382,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           **/
           this.itemMirror.setAssociationNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI);
           assocIM[attributeName] = attributeValue;
+            self.save();
           deferred.resolve(assocIM);
         } else {
           deferred.resolve(assocIM);
@@ -388,6 +397,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         if(GUID) {
           this.itemMirror.setAssociationNamespaceAttribute(attributeName, attributeValue, GUID, this.namespaceURI, function(error) {
             if (error) { deferred.reject(error); }
+            self.save();
             deferred.resolve(self);
           });
         } else {
@@ -525,6 +535,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
       },
 
       setAssociationDisplayText : function(GUID, displayText) {
+        var self = this;
         var deferred = $q.defer();
         
         /**
@@ -535,6 +546,7 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         **/
         
         this.itemMirror.setAssociationDisplayText(GUID, displayText);
+        self.save();
         deferred.resolve('Display text updated');
         
         return deferred.promise; 

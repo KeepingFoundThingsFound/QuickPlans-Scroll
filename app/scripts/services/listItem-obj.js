@@ -30,8 +30,14 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
           return imObj.getPhantomDisplayText()
           .then(function(result) { return imObj.getPhantomURL(); })
 	  .then(function(result) { return
-		if (imObj.getAssociationNamespaceAttribute('priority', assoc) != null){
-		  imObj.addAssociationNamespaceAttribute('order', imObj);
+		var namespaceattr;
+		imObj.getAssociationNamespaceAttribute('order', assoc).then(function(attr){
+		  namespaceattr = attr;
+		})
+		if (namespaceattr == null || namespaceattr == "") {
+		  if (imObj.getAssociationNamespaceAttribute('priority', assoc) != null){
+		    imObj.addAssociationNamespaceAttribute('order', imObj);
+		  }
 		}
 	  })
           .then(function(result) {

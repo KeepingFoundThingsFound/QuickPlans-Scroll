@@ -47,7 +47,11 @@ define(['./module','angular','ItemMirror'], function (services,angular,ItemMirro
         .then(function(associations) { 
           // Adds namespace priority association if one does not already exist
           return $q.all(associations.map(function(assoc) {
-            if (imObj.getAssociationNamespaceAttribute('priority', assoc) != null) {
+            var namespaceattr;
+            imObj.getAssociationNamespaceAttribute('priority', assoc).then(function(attr){
+              namespaceattr = attr;
+            })
+            if (namespaceattr != null || namespaceattr != "") {
               return imObj.getAssociationNamespaceAttribute('priority', assoc);
             }else{
               return imObj.addAssociationNamespaceAttribute('priority', assoc);
